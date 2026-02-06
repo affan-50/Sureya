@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sureya's Sanctuary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --electric-blue: #00D2FF;
+            --neon-green: #39FF14;
+            --chocolate: #2D1B18; 
+            --pink: #FFD1DC;
+            --hot-pink: #F48FB1;
+            --soft-white: #fdfcfc;
+        }
+
+        body, html {
+            margin: 0; padding: 0; min-height: 100%;
+            background: linear-gradient(135deg, var(--chocolate) 0%, #1a0f0d 100%);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--soft-white); overflow-x: hidden;
+        }
+
+        #stars-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .sparkle {
+            position: fixed; background: #fff; border-radius: 50%;
+            pointer-events: none; opacity: 0.4;
+            animation: fall linear infinite; z-index: 1;
+        }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
+
+        .main-wrapper {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 40px 20px; position: relative; z-index: 10;
+        }
+
+        .container {
+            width: 100%; max-width: 480px;
+            background: rgba(45, 27, 24, 0.85); 
+            backdrop-filter: blur(25px); border-radius: 60px;
+            padding: 50px 30px; border: 1.5px solid rgba(0, 210, 255, 0.2);
+            text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        .arabic-name {
+            font-family: 'Amiri', serif; font-size: 5rem;
+            margin: 0; color: white; text-shadow: 0 0 30px var(--hot-pink);
+            line-height: 1; direction: rtl;
+        }
+
+        .flower-divider {
+            font-size: 2.8rem;
+            margin: 20px 0;
+            display: inline-block;
+            filter: drop-shadow(0 0 15px var(--pink));
+            animation: slowFloat 6s ease-in-out infinite, slowRotate 15s linear infinite;
+        }
+
+        @keyframes slowFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+            50% { transform: translateY(-15px) scale(1.15); opacity: 1; }
+        }
+
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-container { position: relative; width: 150px; margin: 0 auto 10px auto; }
+        .profile-img {
+            width: 140px; height: 140px; border-radius: 50%;
+            border: 4px solid var(--hot-pink); object-fit: cover;
+            box-shadow: 0 0 20px rgba(244, 143, 177, 0.3);
+        }
+
+        .ramadan-player {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid var(--electric-blue);
+            padding: 12px 25px;
+            border-radius: 50px;
+            margin: 15px auto 25px auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        }
+        .ramadan-player:hover { background: rgba(0, 210, 255, 0.15); transform: scale(1.05); }
+        .play-btn-icon { color: var(--neon-green); font-size: 1.3rem; }
+        .player-text { font-size: 0.85rem; font-weight: 600; color: white; letter-spacing: 0.5px; }
+
+        .promise-verse {
+            margin: 20px 0; padding: 25px;
+            background: rgba(255, 255, 255, 0.03); border-radius: 30px;
+            border-bottom: 2px solid var(--neon-green);
+        }
+        .ayah-text {
+            font-family: 'Amiri', serif; font-size: 2.2rem; font-weight: bold;
+            background: linear-gradient(to right, var(--electric-blue), var(--neon-green));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, rgba(0, 210, 255, 0.05), rgba(57, 255, 20, 0.05));
+            padding: 25px; border-radius: 35px; border: 1px solid rgba(57, 255, 20, 0.2);
+            margin: 25px 0;
+        }
+        .stat-value { font-size: 3.5rem; font-weight: 800; color: var(--neon-green); display: block; line-height: 1; }
+        .stat-label { font-size: 0.8rem; letter-spacing: 3px; color: var(--electric-blue); text-transform: uppercase; }
+
+        .quran-container {
+            background: rgba(0, 0, 0, 0.3); border-radius: 30px;
+            padding: 20px; margin: 25px 0; border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .quran-scroll { max-height: 180px; overflow-y: auto; padding-right: 8px; }
+        .quran-scroll::-webkit-scrollbar { width: 4px; }
+        .quran-scroll::-webkit-scrollbar-thumb { background: var(--electric-blue); border-radius: 10px; }
+
+        .btn-tg {
+            width: 100%; padding: 15px; border-radius: 20px; background: var(--electric-blue);
+            color: var(--chocolate); font-weight: bold; text-decoration: none; display: block; margin-bottom: 20px;
+        }
+
+        .secret-section { padding: 20px; border-radius: 30px; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+
+    <div id="stars-container"></div>
+
+    <audio id="ramadanMusic" loop>
+        <source src="ramadan.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="arabic-name">ثُـــــــــــــرَيَّـا</div>
+
+            <div><span class="flower-divider">🌸</span></div>
+
+            <div class="profile-container">
+                <img src="sureya.jpg" alt="Sureya" class="profile-img">
+            </div>
+
+            <div class="ramadan-player" onclick="toggleMusic()" id="playerUI">
+                <i class="fas fa-play play-btn-icon" id="playIcon"></i>
+                <span class="player-text">Maher Zain - Ramadan</span>
+            </div>
+
+            <div class="promise-verse">
+                <div class="ayah-text">وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ</div>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-value">11</span>
+                <span class="stat-label">Days Until Ramadan</span>
+            </div>
+
+            <div class="quran-container">
+                <div style="color: var(--hot-pink); font-weight: bold; margin-bottom: 15px;">📖 1x Khatm Plan</div>
+                <div class="quran-scroll">
+                    <table style="width: 100%; text-align: left; border-collapse: collapse;" id="qTable"></table>
+                </div>
+            </div>
+
+            <a href="https://t.me/strong3505" target="_blank" class="btn-tg">
+                <i class="fab fa-telegram-plane"></i> Contact on Telegram
+            </a>
+
+            <div class="secret-section">
+                <input type="password" id="passInput" style="background:rgba(255,255,255,0.05); border: 1px solid var(--electric-blue); color:white; padding:10px; border-radius:15px; text-align:center; width: 80%;" placeholder="Secret Key">
+                <button onclick="checkPass()" style="background:var(--neon-green); border:none; padding:12px; border-radius:15px; font-weight:bold; cursor:pointer; margin-top:10px; width: 80%;">Unlock</button>
+                <div id="secret-content" style="display:none; margin-top:15px;">
+                    ✨ "Sureya, may your Ramadan be full of peace and light. 🧕." ✨
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById("ramadanMusic");
+        const icon = document.getElementById("playIcon");
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                icon.className = "fas fa-pause play-btn-icon";
+            } else {
+                audio.pause();
+                icon.className = "fas fa-play play-btn-icon";
+            }
+        }
+
+        function createSparkle() {
+            const container = document.getElementById('stars-container');
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.top = '-2vh';
+            s.style.width = Math.random() * 3 + 1 + 'px';
+            s.style.animationDuration = Math.random() * 3 + 4 + 's';
+            container.appendChild(s);
+            setTimeout(() => s.remove(), 7000);
+        }
+        setInterval(createSparkle, 400);
+
+        const table = document.getElementById('qTable');
+        for (let i = 1; i <= 30; i++) {
+            table.innerHTML += `<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <td style="padding:12px; font-size: 0.9rem;">Day ${i}: Juz ${i}</td>
+                <td style="text-align:right;">
+                    <i class="far fa-circle" style="color:var(--electric-blue); cursor:pointer;" onclick="toggleIcon(this)"></i>
+                </td>
+            </tr>`;
+        }
+
+        function toggleIcon(icon) {
+            icon.className = 'fas fa-check-circle';
+            icon.style.color = '#39FF14';
+            confetti({ particleCount: 30, spread: 50 });
+        }
+
+        // Password check logic updated to 'sureya'
+        function checkPass() {
+            if(document.getElementById('passInput').value.toLowerCase() === 'sureya') {
+                document.getElementById('secret-content').style.display = 'block';
+                confetti({ particleCount: 150, spread: 70 });
+            }
+        }
+    </script>
+</body>
+</html>
